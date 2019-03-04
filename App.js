@@ -7,6 +7,7 @@
  * @lint-ignore-every XPLATJSCOPYRIGHT1
  */
 
+
 import React, { Component } from 'react';
 import {
   StyleSheet,
@@ -16,15 +17,17 @@ import {
 } from 'react-native';
 import RNGooglePlacePicker from 'react-native-google-place-picker';
 
-export default class WelcomeScreen extends Component {
-  constructor(props) {
+type Props = {};
+export default class App extends Component<Props> {
+
+constructor(props) {
     super(props);
     this.state = {
       location: null
     }
   }
 
-  onPress() {
+onPress() {
     RNGooglePlacePicker.show((response) => {
       if (response.didCancel) {
         console.log('User cancelled GooglePlacePicker');
@@ -39,6 +42,7 @@ export default class WelcomeScreen extends Component {
       }
     })
   }
+
 
   render() {
     return (
