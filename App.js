@@ -7,24 +7,52 @@
  * @lint-ignore-every XPLATJSCOPYRIGHT1
  */
 
-import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import React, { Component } from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity
+} from 'react-native';
+import RNGooglePlacePicker from 'react-native-google-place-picker';
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+export default class WelcomeScreen extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      location: null
+    }
+  }
 
-type Props = {};
-export default class App extends Component<Props> {
+  onPress() {
+    RNGooglePlacePicker.show((response) => {
+      if (response.didCancel) {
+        console.log('User cancelled GooglePlacePicker');
+      }
+      else if (response.error) {
+        console.log('GooglePlacePicker Error: ', response.error);
+      }
+      else {
+        this.setState({
+          location: response
+        });
+      }
+    })
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
+        <TouchableOpacity onPress={this.onPress.bind(this)}>
+          <Text style={{color: '#72c02c', fontSize: 20, fontWeight:'bold'}}>
+            Click me to push Google Place Picker!
+          </Text>
+        </TouchableOpacity>
+        <View style={styles.location}>
+          <Text style={{color: 'black', fontSize: 15}}>
+            {JSON.stringify(this.state)}
+          </Text>
+        </View>
       </View>
     );
   }
@@ -37,14 +65,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+  location: {
+    backgroundColor: 'white',
+    margin: 25
+  }
 });
